@@ -27,6 +27,7 @@ import exceptions.alertAlreadyExists;
 import testOperations.TestDataAccess;
 
 public class createAlertWhiteTestBD {
+	
 	 //sut:system under test
 	 static DataAccess sut=new DataAccess();
 	 

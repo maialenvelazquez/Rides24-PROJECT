@@ -35,6 +35,7 @@ import exceptions.NotEnoughSeatsException;
 import exceptions.bookAlreadyExistException;
 
 public class CreateBookMockWhiteTest {
+	
 static DataAccess sut;
 	
 	protected MockedStatic <Persistence> persistenceMock;

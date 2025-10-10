@@ -35,6 +35,7 @@ import exceptions.RideMustBeLaterThanTodayException;
 import exceptions.alertAlreadyExists;
 
 public class createAlertMockBlackTest {
+	
 
 static DataAccess sut;
 	

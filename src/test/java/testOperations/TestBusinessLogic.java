@@ -12,6 +12,7 @@ import domain.Traveler;
 public class TestBusinessLogic {
 	TestDataAccess dbManagerTest;
  	
+	
     
 	   public TestBusinessLogic()  {
 			

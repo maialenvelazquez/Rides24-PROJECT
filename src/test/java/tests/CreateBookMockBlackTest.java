@@ -32,6 +32,7 @@ import exceptions.NotEnoughSeatsException;
 import exceptions.bookAlreadyExistException;
 
 public class CreateBookMockBlackTest {
+	
 static DataAccess sut;
 	
 	protected MockedStatic <Persistence> persistenceMock;

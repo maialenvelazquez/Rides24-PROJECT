@@ -33,6 +33,7 @@ import exceptions.RideMustBeLaterThanTodayException;
 import exceptions.alertAlreadyExists;
 
 public class createAlertMockWhiteTest {
+	
 static DataAccess sut;
 	
 	protected MockedStatic<Persistence> persistenceMock;

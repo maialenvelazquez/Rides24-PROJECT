@@ -429,42 +429,78 @@ public void open(){
 	    } 
 	}
 	//public void diruaAtera(float kant, String NAN
-	public Book createBook(String NAN, Integer rideNumber, int seats)throws bookAlreadyExistException, NoCashException,NotEnoughSeatsException {
+	public Book createBook(String NAN, Integer rideNumber, int seats)
+			throws bookAlreadyExistException, NoCashException, NotEnoughSeatsException {
 		try {
 			db.getTransaction().begin();
-			Traveler t=db.find(Traveler.class,NAN);
-			Ride r=db.find(Ride.class, rideNumber);
-			
-			if(t.existBook(r)) {
-				db.getTransaction().commit();
-				throw new bookAlreadyExistException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.BookAlreadyExist"));
-			}
-			
-			if(r.getnPlaces()<seats) {
-				db.getTransaction().commit();
-				throw new NotEnoughSeatsException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.NotEnoughSeats"));
-			}
-			if(!t.hasCash(r, seats)) {
-				db.getTransaction().commit();
-				throw new NoCashException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.NoCash"));
-			}
-			//float prezioa=r.getPrice()*seats;
-			float price=r.calculatePrice(seats);	
-			Book book=t.addBook(r, seats);
-			book.setDiruIzoztuta(price);
-			float d= t.diruaAtera(price);
-			//t.setDirua(t.getDirua()-prezioa);
-			//db.persist(book);
-			r.addBook(book);
-			//r.setnPlaces((int)r.getnPlaces() - seats);
-			int nPlaces=r.updatenPlaces(seats);
-			db.persist(t);
+
+			Traveler traveler = db.find(Traveler.class, NAN);
+			Ride ride = db.find(Ride.class, rideNumber);
+
+			validateBooking(traveler, ride, seats);
+
+			float price = ride.calculatePrice(seats);
+			Book book = processBooking(traveler, ride, seats, price);
+
+			db.persist(traveler);
 			db.getTransaction().commit();
+
 			return book;
-		}catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			db.getTransaction().commit();
 			return null;
 		}
+	}
+
+	private void validateBooking(Traveler traveler, Ride ride, int seats)
+	        throws bookAlreadyExistException, NotEnoughSeatsException, NoCashException {
+	    checkIfAlreadyBooked(traveler, ride);
+	    checkSeatAvailability(ride, seats);
+	    checkTravelerHasCash(traveler, ride, seats);
+	}
+
+	private void checkIfAlreadyBooked(Traveler traveler, Ride ride) throws bookAlreadyExistException {
+	    if (traveler.existBook(ride)) {
+	        throw new bookAlreadyExistException(getMessage("DataAccess.BookAlreadyExist"));
+	    }
+	}
+
+	private void checkSeatAvailability(Ride ride, int seats) throws NotEnoughSeatsException {
+	    if (ride.getnPlaces() < seats) {
+	        throw new NotEnoughSeatsException(getMessage("DataAccess.NotEnoughSeats"));
+	    }
+	}
+
+	private void checkTravelerHasCash(Traveler traveler, Ride ride, int seats) throws NoCashException {
+	    if (!traveler.hasCash(ride, seats)) {
+	        throw new NoCashException(getMessage("DataAccess.NoCash"));
+	    }
+	}
+
+	private Book processBooking(Traveler traveler, Ride ride, int seats, float price) {
+	    Book book = createBookEntry(traveler, ride, seats, price);
+	    updateTravelerCash(traveler, price);
+	    updateRideBooking(ride, book, seats);
+	    return book;
+	}
+
+	private Book createBookEntry(Traveler traveler, Ride ride, int seats, float price) {
+	    Book book = traveler.addBook(ride, seats);
+	    book.setDiruIzoztuta(price);
+	    return book;
+	}
+
+	private void updateTravelerCash(Traveler traveler, float price) {
+	    traveler.diruaAtera(price);
+	}
+
+	private void updateRideBooking(Ride ride, Book book, int seats) {
+	    ride.addBook(book);
+	    ride.updatenPlaces(seats);
+	}
+
+	private String getMessage(String key) {
+	    return ResourceBundle.getBundle("Etiquetas").getString(key);
 	}
 	/**
 	private void updateMoney(Traveler t, float kant) {

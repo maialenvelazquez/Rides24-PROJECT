@@ -87,7 +87,7 @@ public class createBalorazioBlackMockTest {
 	    Traveler traveler = new Traveler("12345678A", "traveler1", "123", "traveler1@gmail.com", "Ibai", "Martin", "01/02/1997", 612332456, "male" );
 	    Ride ride = new Ride(rideNumber, "Donostia", "Bilbo", rideDate, 4, 30.00f, d, k);
 	       	
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -96,7 +96,7 @@ public class createBalorazioBlackMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	       	assertNotNull(b);
@@ -134,7 +134,7 @@ public class createBalorazioBlackMockTest {
 	    Traveler traveler = new Traveler(NAN, "traveler1", "123", "traveler1@gmail.com", "Ibai", "Martin", "01/02/1997", 612332456, "male" );
 	    Ride ride = new Ride(rideNumber, "Donostia", "Bilbo", rideDate, 4, 30.00f, d, k);
 	       	
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -143,7 +143,7 @@ public class createBalorazioBlackMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	       	assertNull(b);
@@ -181,7 +181,7 @@ public class createBalorazioBlackMockTest {
 	    Traveler traveler = new Traveler(NAN, "traveler1", "123", "traveler1@gmail.com", "Ibai", "Martin", "01/02/1997", 612332456, "male" );
 	    Ride ride = new Ride(rideNumber, "Donostia", "Bilbo", rideDate, 4, 30.00f, d, k);
 	       	
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);;
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -190,7 +190,7 @@ public class createBalorazioBlackMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	       	assertNull(b);
@@ -230,7 +230,7 @@ public class createBalorazioBlackMockTest {
 	       	
 	    traveler.addBalorazio(idBalorazioa, puntuazioa, komentarioa, data, ride);
 	    
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -239,7 +239,7 @@ public class createBalorazioBlackMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	    } catch (reviewAlreadyExistsException e) {
@@ -276,7 +276,7 @@ public class createBalorazioBlackMockTest {
 	    Ride ride = new Ride(rideNumber, "Donostia", "Bilbo", rideDate, 4, 30.00f, d, k);
 	       	
 	    
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -285,7 +285,7 @@ public class createBalorazioBlackMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	    } catch (reviewAlreadyExistsException e) {

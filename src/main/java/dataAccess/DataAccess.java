@@ -748,22 +748,45 @@ public void open(){
 	}
 	public Alerta createAlert(String nondik, String nora, Date data, String NAN) throws alertAlreadyExists, RideMustBeLaterThanTodayException{
 		try {
-			if(new Date().compareTo(data)>0) {
-				throw new RideMustBeLaterThanTodayException(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
-			}
+			checkDateIsValid(data);
 			db.getTransaction().begin();
-			Traveler t= db.find(Traveler.class,NAN );
-			if (t.doesAlertExist(nondik,nora, data)) {
-				db.getTransaction().commit();
-				throw new alertAlreadyExists(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.alertAlreadyExists"));
-			}
-			Alerta alerta=t.addAlert(nondik, nora, data);
-			//db.persist(t); -> ez da beharrezkoa, dagoeneko commit egiten delako
-			db.getTransaction().commit();
+			Traveler t = findTraveler(NAN);
+			checkAlertDoesNotExist(nondik, nora, data, t);
+			Alerta alerta = saveAlert(nondik, nora, data, t);
 			return alerta;
 		} catch (NullPointerException e) {
 			db.getTransaction().commit();
 			return null;
+		}
+	}
+
+	private Alerta saveAlert(String nondik, String nora, Date data, Traveler t) throws alertAlreadyExists {
+		if (t.doesAlertExist(nondik,nora, data)) {
+			db.getTransaction().commit();
+			throw new alertAlreadyExists(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.alertAlreadyExists"));
+		}
+		Alerta alerta=t.addAlert(nondik, nora, data);
+		//db.persist(t); -> ez da beharrezkoa, dagoeneko commit egiten delako
+		db.getTransaction().commit();
+		return alerta;
+	}
+
+
+	private void checkAlertDoesNotExist(String nondik, String nora, Date data, Traveler t) throws alertAlreadyExists {
+		if (t.doesAlertExist(nondik,nora, data)) {
+			db.getTransaction().commit();
+			throw new alertAlreadyExists(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.alertAlreadyExists"));
+		}
+	}
+
+	private Traveler findTraveler(String NAN) {
+		Traveler t= db.find(Traveler.class,NAN );
+		return t;
+	}
+
+	private void checkDateIsValid(Date data) throws RideMustBeLaterThanTodayException {
+		if(new Date().compareTo(data)>0) {
+			throw new RideMustBeLaterThanTodayException(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
 		}
 	}
 	public List<Ride> getRidesRelatedToAlerts(String NAN){
@@ -801,7 +824,7 @@ public void open(){
 
 		}
 	}
-	public Balorazio createBalorazio(Integer idBalorazio, int puntuazioa, String komentarioa, String data, String NAN, Integer rideNumber) throws reviewAlreadyExistsException, ratingMoreThanFiveException{
+	public Balorazio createBalorazio(Balorazio balorazioa, String NAN, Integer rideNumber) throws reviewAlreadyExistsException, ratingMoreThanFiveException{
 		try {
 			if (NAN == null || rideNumber == null || rideNumber < 0) {
 				return null;
@@ -809,21 +832,34 @@ public void open(){
 			db.getTransaction().begin();
 			Traveler t= db.find(Traveler.class,NAN );
 			Ride r=db.find(Ride.class,rideNumber );
-			if(t.balorazioExist(rideNumber)) {
-				db.getTransaction().commit();
-				throw new reviewAlreadyExistsException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.reviewAlreadyExistsException"));
-			}
-			if(puntuazioa>5) {
-				db.getTransaction().commit();
-				throw new ratingMoreThanFiveException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.ratingMoreThanFiveException"));
-			}
-			Balorazio b=t.addBalorazio(idBalorazio, puntuazioa, komentarioa, data, r);
-			r.addBalorazio(b);
-			db.getTransaction().commit();
+			checkBalorazioDoesExist(rideNumber, t);
+			checkPuntuazioa(balorazioa.getPuntuazioa());
+			Balorazio b = createAndLinkBalorazioa(balorazioa, t, r);
 			return b;
 		}catch(NullPointerException e){
 			db.getTransaction().commit();
 			return null;
+		}
+	}
+
+	private Balorazio createAndLinkBalorazioa(Balorazio balorazioa, Traveler t, Ride r) {
+		Balorazio b=t.addBalorazio(balorazioa.getId(), balorazioa.getPuntuazioa(), balorazioa.getKomentarioa(), balorazioa.getData(), r);
+		r.addBalorazio(b);
+		db.getTransaction().commit();
+		return b;
+	}
+
+	private void checkPuntuazioa(int puntuazioa) throws ratingMoreThanFiveException {
+		if(puntuazioa>5) {
+			db.getTransaction().commit();
+			throw new ratingMoreThanFiveException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.ratingMoreThanFiveException"));
+		}
+	}
+
+	private void checkBalorazioDoesExist(Integer rideNumber, Traveler t) throws reviewAlreadyExistsException {
+		if(t.balorazioExist(rideNumber)) {
+			db.getTransaction().commit();
+			throw new reviewAlreadyExistsException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.reviewAlreadyExistsException"));
 		}
 	}
 	public Erreklamazio createErreklamazio (String deskribapena, String data, String erreklamatzaileNAN, String erreklamatuNAN, Integer rideNumber) throws erreklamazioAlreadyExistsException {

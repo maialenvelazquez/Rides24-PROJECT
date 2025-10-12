@@ -77,8 +77,9 @@ public class createBalorazioBlackTestBD {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        
         Balorazio b = null;
+
 
         try {
             testDA.open();
@@ -87,9 +88,11 @@ public class createBalorazioBlackTestBD {
             Traveler traveler = testDA.createTraveler(travelerNAN, travelerLog, travelerPass, travelerEmail, travelerIzena, travelerAbizena, travelerJaiotze, travelerTelefono, travelerSexu);
             Ride ride = testDA.createRide(rideNumber, from, to, rideDate, nPlaces, price, d, k);
             testDA.close();
+            
+            b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 
             sut.open();
-            b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, travelerNAN, rideNumber);
+            b = sut.createBalorazio(b, travelerNAN, rideNumber);
             sut.close();
 
             assertNotNull(b);
@@ -180,9 +183,11 @@ public class createBalorazioBlackTestBD {
             Traveler traveler = testDA.createTraveler(travelerNAN, travelerLog, travelerPass, travelerEmail, travelerIzena, travelerAbizena, travelerJaiotze, travelerTelefono, travelerSexu);
             Ride ride = testDA.createRide(rideNumber, from, to, rideDate, nPlaces, price, d, k);
             testDA.close();
+            
+            b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 
             sut.open();
-            b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, travelerNAN, rideNumber);
+            b = sut.createBalorazio(b, travelerNAN, rideNumber);
             sut.close();
 
             assertNotNull(b);
@@ -275,9 +280,11 @@ public class createBalorazioBlackTestBD {
             Traveler traveler = testDA.createTraveler(travelerNAN, travelerLog, travelerPass, travelerEmail, travelerIzena, travelerAbizena, travelerJaiotze, travelerTelefono, travelerSexu);
             Ride ride = testDA.createRide(rideNumber, from, to, rideDate, nPlaces, price, d, k);
             testDA.close();
+            
+            b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 
             sut.open();
-            b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, travelerNAN, rideNumber);
+            b = sut.createBalorazio(b, travelerNAN, rideNumber);
             sut.close();
 
             assertNotNull(b);
@@ -366,9 +373,11 @@ public class createBalorazioBlackTestBD {
             Ride ride = testDA.createRide(rideNumber, from, to, rideDate, nPlaces, price, d, k);
             testDA.addRideNumberWithBalorazio(idBalorazioa, puntuazioa, komentarioa, data, rideNumber, travelerNAN);
             testDA.close();
+            
+            b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 
             sut.open();
-            b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, travelerNAN, rideNumber);
+            b = sut.createBalorazio(b, travelerNAN, rideNumber);
             sut.close();
 
             assertNotNull(b);
@@ -457,9 +466,11 @@ public class createBalorazioBlackTestBD {
             Traveler traveler = testDA.createTraveler(travelerNAN, travelerLog, travelerPass, travelerEmail, travelerIzena, travelerAbizena, travelerJaiotze, travelerTelefono, travelerSexu);
             Ride ride = testDA.createRide(rideNumber, from, to, rideDate, nPlaces, price, d, k);
             testDA.close();
+            
+            b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 
             sut.open();
-            b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, travelerNAN, rideNumber);
+            b = sut.createBalorazio(b, travelerNAN, rideNumber);
             sut.close();
 
             assertNotNull(b);

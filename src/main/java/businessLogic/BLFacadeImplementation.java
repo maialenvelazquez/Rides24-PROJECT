@@ -268,9 +268,9 @@ public class BLFacadeImplementation  implements BLFacade {
 	dbManager.close();
 	}
     @WebMethod
-	public Balorazio createBalorazio(Integer idBalorazio, int puntuazio, String komentario, String data,String NAN, Integer rideNumber) throws reviewAlreadyExistsException, ratingMoreThanFiveException {
+	public Balorazio createBalorazio(Balorazio balorazioa, String NAN, Integer rideNumber) throws reviewAlreadyExistsException, ratingMoreThanFiveException {
 		dbManager.open();
-    	Balorazio b=dbManager.createBalorazio(idBalorazio, puntuazio, komentario, data,NAN, rideNumber);
+    	Balorazio b=dbManager.createBalorazio(balorazioa, NAN, rideNumber);
     	dbManager.close();
     	return b;
 	}
@@ -343,4 +343,5 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 }
+
 

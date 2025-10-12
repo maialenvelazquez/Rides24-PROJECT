@@ -77,20 +77,24 @@ public class createBalorazioWhiteMockTest {
 	    
 	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	    Date rideDate = null;
+	    
+	    Ride ride = null;
+	    Traveler traveler = null;
+	    
 	    try {
 	   		rideDate = sdf.parse("05/06/2025");
 	   	} catch (ParseException e) {
 	   		e.printStackTrace();
 	    }
 	          	
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Traveler.class, NAN)).thenReturn(null);
 	    Mockito.when(db.find(Ride.class, rideNumber)).thenReturn(null);
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	       	assertNull(b);
@@ -130,7 +134,7 @@ public class createBalorazioWhiteMockTest {
 	       	
 	    traveler.addBalorazio(idBalorazioa, puntuazioa, komentarioa, data, ride);
 	    
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -139,7 +143,7 @@ public class createBalorazioWhiteMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	    } catch (reviewAlreadyExistsException e) {
@@ -176,7 +180,7 @@ public class createBalorazioWhiteMockTest {
 	    Ride ride = new Ride(rideNumber, "Donostia", "Bilbo", rideDate, 4, 30.00f, d, k);
 	       	
 	    
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -185,7 +189,7 @@ public class createBalorazioWhiteMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	    } catch (reviewAlreadyExistsException e) {
@@ -221,7 +225,7 @@ public class createBalorazioWhiteMockTest {
 	    Traveler traveler = new Traveler("12345678A", "traveler1", "123", "traveler1@gmail.com", "Ibai", "Martin", "01/02/1997", 612332456, "male" );
 	    Ride ride = new Ride(rideNumber, "Donostia", "Bilbo", rideDate, 4, 30.00f, d, k);
 	       	
-	    Balorazio b = null;
+	    Balorazio b = new Balorazio(idBalorazioa, puntuazioa, komentarioa, data, ride, traveler);
 	    
 	    Mockito.when(db.find(Driver.class, d.getNAN())).thenReturn(d);
 	    Mockito.when(db.find(Kotxe.class, k.getMatrikula())).thenReturn(k);
@@ -230,7 +234,7 @@ public class createBalorazioWhiteMockTest {
 
 	    try {
 	    	sut.open();
-	       	b = sut.createBalorazio(idBalorazioa, puntuazioa, komentarioa, data, NAN, rideNumber);
+	       	b = sut.createBalorazio(b, NAN, rideNumber);
 	       	sut.close();
 
 	       	assertNotNull(b);
